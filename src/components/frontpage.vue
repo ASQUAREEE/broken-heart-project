@@ -13,7 +13,7 @@
           placeholder="Enter your name"
           class="custom-input"
         >
-        <v-btn color="danzer" dark @click="enterRoom" href="/home">Enter</v-btn>
+        <v-btn color="danzer" dark @click="enterRoom" href="/chat">Enter</v-btn>
       </div>
       <!-- Your front page content goes here -->
     </div>
@@ -24,9 +24,12 @@
 
 <script>
 
+import axios from 'axios';
+
 
 export default {
     name: 'frontpage',
+    
 
     data() {
       return {
@@ -37,8 +40,34 @@ export default {
     methods: {
       enterRoom() {
         this.$emit('new-message', this.name)
-        this.name = ''
-      }
+        
+        console.log(this.name)
+
+        this.$store.dispatch('setName', this.name);
+        this.$router.push('/chat');
+       
+        axios.post('http://127.0.0.1:8000/edit/name/', {name: this.name})
+        .then(({ data }) => {
+          alert('Event saved!');
+          // this.name = ''
+        });
+
+      },
+
+      // enterRoom(nickname) {
+      //   axios.post('http://127.0.0.1:8000/edit/name/', { name: nickname })
+      //   .then(response => {
+      //     console.log('name saved!');
+      //   })
+      //   .catch(error => {
+      //     // Handle error
+      //   })
+      // },
+
+
+
+
+
     }
 
 }
